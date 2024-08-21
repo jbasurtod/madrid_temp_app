@@ -1,0 +1,468 @@
+/* Importing Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%; /* Ensure the body takes the full height */
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-image: url('bg.jpg');
+  background-size: cover; /* Cover the entire element */
+  background-position: center center; /* Center the image */
+  background-repeat: no-repeat; /* Prevent repeating the image */
+  user-select: none; /* Disable text selection */
+  -webkit-user-select: none; /* For Safari */
+  -moz-user-select: none; /* For Firefox */
+  -ms-user-select: none; /* For Internet Explorer/Edge */
+}
+
+.app-wrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
+}
+
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 15px 15px;
+}
+
+header input {
+  width: 100%;
+  max-width: 280px;
+  padding: 10px 15px;
+  border: none;
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 0px 16px 0px 16px;
+  border-bottom: 3px solid gray;
+  color: #313131;
+  font-size: 20px;
+  font-weight: 300;
+  transition: 0.2s ease-out;
+}
+
+header input:focus {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+main {
+  flex: 1 1 100%;
+  padding: 25px 25px 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.location .titulo {
+  color: #fff;
+  font-size: 40px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  margin-top: 20px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.location .date {
+  color: #fff;
+  font-size: 16px;
+}
+
+.current .temp {
+  color: #fff;
+  font-size: 110px;
+  font-weight: 900;
+  margin: 30px 0px 10px 0px;
+  text-shadow: 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.current .temp span {
+  font-weight: 500;
+}
+
+.current .weather {
+  color: #fff;
+  font-size: 32px;
+  font-weight: 700;
+  font-style: italic;
+  margin-bottom: 15px;
+  text-shadow: 0px 3px rgba(0, 0, 0, 0.4);
+}
+
+.current .hi-low {
+  color: #fff;
+  font-size: 30px;
+  margin-top: 0px;
+  font-weight: 500;
+  text-shadow: 0px 4px rgba(0, 0, 0, 0.4);
+}
+
+.table-container {
+  width: 100%; /* Use full width of the parent container */
+  max-width: 900px; /* Limit max width */
+  overflow-x: auto; /* Enables horizontal scrolling */
+  white-space: nowrap; /* Prevents wrapping of table contents */
+  margin: 10px 0; /* Adds vertical spacing around the table */
+  background: rgba(255, 255, 255, 0.6); /* Semi-transparent background */
+  padding: 10px;
+  border-radius: 10px; /* Rounded corners for the table container */
+  border: 1px solid #ddd; /* Border around the table container */
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%; /* Make table width responsive */
+  text-align: center;
+}
+
+th, td {
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+  font-size: 16px; /* Adjust font size for readability */
+  font-family: 'Roboto', sans-serif;
+  color: #333;
+}
+
+.table-container th.fecha {
+  font-size: 20px; /* Specific size for date columns */
+}
+
+td {
+  background-color: rgba(255, 255, 255, 0.6); /* Semi-transparent cells */
+  font-size: 18px; /* Adjust font size for readability */
+  font-weight: bold;
+  font-family: 'Verdana', sans-serif; /* Stylish font for temperatures */
+  transition: color 0.3s ease;
+  min-width: 80px; /* Ensures cells are wide enough */
+  text-align: center; /* Centers the text within cells */
+  padding: 20px; /* Adjust padding inside each cell */
+}
+
+thead {
+  position: sticky; /* Stick the header */
+
+}
+
+thead th {
+  background-color: rgba(45, 99, 47, 0.6);
+  color: white;
+}
+
+thead td {
+  background-color: #f9f9f9;
+}
+
+/* Temperature-based color scheme (if needed) */
+td.temperature {
+  color: #000;
+}
+
+/* Diverging colormap for temperatures (if needed) */
+td[data-temp] {
+  color: #4b4545;
+  font-size: 45px;
+  font-weight: bold;
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* Responsive adjustments for screens 1080px and below */
+@media (max-width: 1080px) {
+  .location .titulo {
+    font-size: 60px; /* Adjust font size for larger phones */
+  }
+
+  .location .date {
+    font-size: 30px; /* Adjust size for larger phones */
+  }
+
+  .current .temp {
+    font-size: 90px; /* Adjust size for larger phones */
+  }
+
+  .current .hi-low {
+    font-size: 24px; /* Adjust size for larger phones */
+  }
+
+  th, td {
+    font-size: 16px; /* Adjust font size for better readability */
+  }
+
+  .table-container th.fecha {
+    font-size: 16px; /* Adjust size for date columns */
+  }
+
+  td {
+    font-size: 16px; /* Adjust font size for readability */
+    padding: 15px; /* Adjust padding for readability */
+  }
+}
+
+/* Further adjustments for screens 768px and below */
+@media (max-width: 768px) {
+  .location .titulo {
+    font-size: 30px; /* Adjust font size for very small screens */
+  }
+
+  .location .date {
+    font-size: 20px; /* Adjust font size for very small screens */
+  }
+
+  .current .temp {
+    font-size: 70px; /* Adjust size for very small screens */
+  }
+
+  .current .hi-low {
+    font-size: 20px; /* Adjust size for very small screens */
+  }
+
+  th, td {
+    font-size: 18px; /* Further adjust font size */
+    padding: 8px; /* Further adjust padding */
+  }
+
+  .table-container th.fecha {
+    font-size: 18px; /* Further adjust size for date columns */
+  }
+
+  td {
+    font-size: 12px; /* Further adjust font size */
+    padding: 8px; /* Further adjust padding */
+  }
+  td[data-temp] {
+    color: #4b4545;
+    font-size: 35px;
+    font-weight: bold;
+    font-family: 'Open Sans', sans-serif;
+  }
+}
+
+/* Further adjustments for very small screens */
+@media (max-width: 480px) {
+  .location .titulo {
+    font-size: 30px; /* Adjust font size for very small screens */
+  }
+
+  .location .date {
+    font-size: 15px; /* Adjust font size for very small screens */
+  }
+
+  .current .temp {
+    font-size: 80px; /* Adjust size for very small screens */
+  }
+
+  .current .hi-low {
+    font-size: 20x; /* Adjust size for very small screens */
+  }
+
+  th, td {
+    font-size: 16px; /* Further adjust font size */
+    padding: 8px; /* Further adjust padding */
+  }
+
+  .table-container th.fecha {
+    font-size: 16px; /* Further adjust size for date columns */
+  }
+
+  td {
+    font-size: 12px; /* Further adjust font size */
+    padding: 20px 6px; /* Further adjust padding */
+  }
+  td[data-temp] {
+    color: #4b4545;
+    font-size: 35px;
+    font-weight: bold;
+    font-family: 'Open Sans', sans-serif;
+  }
+  .table-container {
+    width: 100%; /* Use full width of the parent container */
+    max-width: 900px; /* Limit max width */
+    overflow-x: auto; /* Enables horizontal scrolling */
+    white-space: nowrap; /* Prevents wrapping of table contents */
+    margin: 10px 0; /* Adds vertical spacing around the table */
+    background: rgba(255, 255, 255, 0.6); /* Semi-transparent background */
+    padding: 10px;
+    border-radius: 10px; /* Rounded corners for the table container */
+    border: 1px solid #ddd; /* Border around the table container */
+  }
+  html, body {
+    height: 100%; /* Ensure the body takes the full height */
+    overflow-x: hidden; /* Prevent horizontal overflow */
+  }
+  
+  .app-wrap {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure it stretches to full viewport height */
+    overflow: hidden; /* Prevent overflow */
+  }
+
+}
+
+div::-webkit-scrollbar
+{
+height:20px;
+
+}
+div::-webkit-scrollbar-track
+{
+    border-radius: 40px;
+
+    webkit-box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+}
+div::-webkit-scrollbar-thumb
+{
+    background-color: rgba(45, 99, 47, 0.6);
+
+
+    webkit-box-shadow: inset 0 0 40px rgba(0,0,0,0.5);
+}
+
+/* Footer Styling */
+.footer {
+  position: fixed; /* Fix the position to the bottom */
+  bottom: 30px; /* 30px from the bottom of the screen */
+  left: 0; /* Align to the left edge */
+  width: 100%; /* Full width */
+  text-align: center; /* Center the text */
+  font-size: 14px; /* Adjust font size */
+  color: #fff; /* Text color */
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for readability */
+  padding: 10px; /* Padding around the text */
+  box-shadow: 0px -1px 5px rgba(0, 0, 0, 0.3); /* Optional shadow for better visibility */
+}
+
+.footer a {
+  color: #00aaff; /* Link color */
+  text-decoration: none; /* Remove underline from link */
+  font-weight: bold; /* Bold link text */
+}
+
+.footer a:hover {
+  text-decoration: underline; /* Underline on hover */
+}
+
+/* About link in footer */
+.about-link {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  display: block;
+  margin-top: 10px;
+}
+
+.about-link:hover {
+  text-decoration: underline;
+}
+
+/* Modal styling */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1000; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0, 0, 0, 0.5); /* Black with opacity */
+}
+
+.modal-content {
+  background-color: white;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border-radius: 5px;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+.close-btn {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+.title-table {
+  color: white;
+  font-size: 20px;
+  margin: 40px 0px 5px 0px; /* 10px margin above and below */
+  text-align: center;
+  font-weight: normal; /* Make the text bold for better visibility */
+  text-shadow: 2px 3px rgba(0, 0, 0, 0.6);
+}
+
+/* About This Page link styling */
+.about-link {
+  display: block;
+  margin: 20px auto; /* Center the link and add spacing */
+  font-size: 18px; /* Larger font size for prominence */
+  color: white;
+  text-decoration: none; /* Remove underline */
+  text-align: center; /* Center the text */
+}
+
+.about-link:hover {
+  text-decoration: underline; /* Add underline on hover */
+}
+
+/* Modal styling */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1000; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0, 0, 0, 0.5); /* Black with opacity */
+}
+
+.modal-content {
+  background-color: white;
+  margin: 15% auto; /* Centered with margin from top */
+  padding: 20px;
+  border-radius: 5px;
+  width: 80%; /* Could be more or less, depending on screen size */
+  max-width: 600px; /* Max width for better appearance */
+}
+
+
+.close-btn {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+  color: black;
+  text-decoration: none;
+}
+.info {
+margin-top: 20px;
+margin-bottom: 20px;
+}
