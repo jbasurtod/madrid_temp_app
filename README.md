@@ -22,7 +22,7 @@ The **Madrid Temperature App** is a Python-based application that retrieves, pro
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/madrid_temp_app.git
+   git clone https://github.com/jbasurtod/madrid_temp_app.git
    cd madrid_temp_app
    ```
 
