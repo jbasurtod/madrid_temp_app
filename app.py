@@ -38,5 +38,6 @@ def index():
         forecast_5d=forecast_5d  # Pass the forecast data to the template
     )
 
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)

@@ -337,7 +337,7 @@ td[data-temp] {
     height: 100%; /* Ensure the body takes the full height */
     overflow-x: hidden; /* Prevent horizontal overflow */
   }
-  
+
   .app-wrap {
     display: flex;
     flex-direction: column;

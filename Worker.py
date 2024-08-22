@@ -99,28 +99,28 @@ class Worker:
 
         # Get the current datetime in Madrid timezone
         current_datetime = datetime.now(madrid_timezone)
-        
+
         # Extract the first datetime from last_24_predictions
         first_datetime_str = last_24_predictions['datetime'].iloc[0]
-        
+
         # Convert the string to a datetime object
         first_datetime = pd.to_datetime(first_datetime_str)
-        
+
         # Convert the naive first_datetime to timezone-aware using Madrid timezone
         if first_datetime.tzinfo is None:
             first_datetime = madrid_timezone.localize(first_datetime)
-        
+
         # Compare the timezone-aware current_datetime to the timezone-aware first_datetime
         if current_datetime > first_datetime:
             # Pop the first datetime and update last_temperature
             first_temp = last_24_predictions['pred_xgb'].iloc[0]
-            
+
             # Remove the first item
             last_24_predictions = last_24_predictions.iloc[1:]
-            
+
             # Update last_temperature with the temperature of the first item
             last_temperature = first_temp
-            
+
             # Update formatted_datetime to reflect the change
             formatted_datetime = first_datetime.strftime('%B %d, %H:%M')
 
@@ -131,7 +131,7 @@ class Worker:
         max_temp, min_temp = self.TodaysMaxMin(historic_df, predictions_df)
 
         return int(last_temperature), formatted_datetime, dates, date_hour_temp_map, max_temp, min_temp, pred5d_df
-    
+
     def TodaysMaxMin(self, historic_df, predictions_df):
         # Ensure 'datetime' columns are in datetime format
         historic_df['datetime'] = pd.to_datetime(historic_df['datetime'])
@@ -182,11 +182,11 @@ class Worker:
         # Convert index to DatetimeIndex and format as hours
         last_24_predictions.index = pd.to_datetime(last_24_predictions.index)
         hours = last_24_predictions.index.strftime('%H:%M').tolist()
-        
+
         # Extract unique dates and temperatures
         unique_dates = last_24_predictions.index.normalize().unique()
         dates = [date.strftime('%B %d') for date in unique_dates]
-        
+
         # Prepare the table data by date
         date_hour_temp_map = {}
         for date in unique_dates:
@@ -195,6 +195,6 @@ class Worker:
                 'hours': date_data.index.strftime('%H:%M').tolist(),
                 'temperatures': date_data['pred_xgb'].round().astype(int).tolist()
             }
-        
+
         return dates, date_hour_temp_map
 
