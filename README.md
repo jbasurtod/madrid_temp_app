@@ -1,6 +1,6 @@
 # Madrid Temperature App
 
-<img src="https://github.com/jbasurtod/madrid_temp_app/blob/main/img/live_app.png"  />
+<img src="https://github.com/jbasurtod/madrid_temp_app/blob/main/img/live_app.png" width="600" />
 
 ## Overview
 
