@@ -17,18 +17,20 @@ body {
   background-size: cover; /* Cover the entire element */
   background-position: center center; /* Center the image */
   background-repeat: no-repeat; /* Prevent repeating the image */
+  background-attachment: fixed; /* Keep the background fixed while content scrolls */
   user-select: none; /* Disable text selection */
   -webkit-user-select: none; /* For Safari */
   -moz-user-select: none; /* For Firefox */
   -ms-user-select: none; /* For Internet Explorer/Edge */
 }
 
+
 .app-wrap {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
+  min-height: 100vh; /* Ensure it stretches to full viewport height */
 }
+
 
 header {
   display: flex;
@@ -119,6 +121,17 @@ main {
   border-radius: 10px; /* Rounded corners for the table container */
   border: 1px solid #ddd; /* Border around the table container */
 }
+.table-container-forecast {
+  width: 100%; /* Use full width of the parent container */
+  max-width: 600px; /* Limit max width */
+  overflow-x: auto; /* Enables horizontal scrolling */
+  white-space: nowrap; /* Prevents wrapping of table contents */
+  margin: 10px 0px 100px; /* Adds vertical spacing around the table */
+  background: rgba(255, 255, 255, 0.6); /* Semi-transparent background */
+  padding: 10px;
+  border-radius: 10px; /* Rounded corners for the table container */
+  border: 1px solid #ddd; /* Border around the table container */
+}
 
 table {
   border-collapse: collapse;
@@ -140,6 +153,17 @@ th {
 
 .table-container th.fecha {
   font-size: 20px; /* Specific size for date columns */
+}
+
+.table-container-forecast th {
+  font-size: 14px; /* Further adjust size for date columns */
+  padding: 8px 0px;
+}
+.table-container-forecast td.forecast {
+  font-size: 25px; /* Further adjust size for date columns */
+}
+.table-container-forecast td.day {
+  font-size: 18px; /* Further adjust size for date columns */
 }
 
 td {
@@ -254,7 +278,7 @@ td[data-temp] {
 /* Further adjustments for very small screens */
 @media (max-width: 480px) {
   .location .titulo {
-    font-size: 30px; /* Adjust font size for very small screens */
+    font-size: 25px; /* Adjust font size for very small screens */
   }
 
   .location .date {
@@ -275,9 +299,19 @@ td[data-temp] {
   }
 
   .table-container th.fecha {
-    font-size: 16px; /* Further adjust size for date columns */
+    font-size: 14px; /* Further adjust size for date columns */
   }
 
+  .table-container-forecast th {
+    font-size: 14px; /* Further adjust size for date columns */
+    padding: 5px 0px;
+  }
+  .table-container-forecast td.forecast {
+    font-size: 20px; /* Further adjust size for date columns */
+  }
+  .table-container-forecast td.day {
+    font-size: 13px; /* Further adjust size for date columns */
+  }
   td {
     font-size: 12px; /* Further adjust font size */
     padding: 20px 6px; /* Further adjust padding */
@@ -310,7 +344,17 @@ td[data-temp] {
     min-height: 100vh; /* Ensure it stretches to full viewport height */
     overflow: hidden; /* Prevent overflow */
   }
-
+  .table-container-forecast {
+    width: 100%; /* Use full width of the parent container */
+    max-width: 400px; /* Limit max width */
+    overflow-x: auto; /* Enables horizontal scrolling */
+    white-space: nowrap; /* Prevents wrapping of table contents */
+    margin: 10px 0px 200px; /* Adds vertical spacing around the table */
+    background: rgba(255, 255, 255, 0.6); /* Semi-transparent background */
+    padding: 10px;
+    border-radius: 10px; /* Rounded corners for the table container */
+    border: 1px solid #ddd; /* Border around the table container */
+  }
 }
 
 div::-webkit-scrollbar
@@ -406,7 +450,16 @@ div::-webkit-scrollbar-thumb
 .title-table {
   color: white;
   font-size: 20px;
-  margin: 40px 0px 5px 0px; /* 10px margin above and below */
+  margin: 28px 0px 5px 0px; /* 10px margin above and below */
+  text-align: center;
+  font-weight: normal; /* Make the text bold for better visibility */
+  text-shadow: 2px 3px rgba(0, 0, 0, 0.6);
+}
+
+.title-table-forecast {
+  color: white;
+  font-size: 20px;
+  margin: 28px 0px 5px 0px; /* 10px margin above and below */
   text-align: center;
   font-weight: normal; /* Make the text bold for better visibility */
   text-shadow: 2px 3px rgba(0, 0, 0, 0.6);
@@ -466,3 +519,61 @@ div::-webkit-scrollbar-thumb
 margin-top: 20px;
 margin-bottom: 20px;
 }
+
+/* Other existing styles... */
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-image: url('bg.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  user-select: none;
+  height: 100vh; /* Set the body to the full viewport height */
+  margin: 0; /* Remove any default margins */
+}
+
+.app-wrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
+  justify-content: space-between; /* Ensures main content fills the space between header and footer */
+}
+
+main {
+  flex: 1;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0; /* Ensures footer stays at the very bottom of the viewport */
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  box-shadow: 0px -1px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Modal styling */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Other existing styles... */

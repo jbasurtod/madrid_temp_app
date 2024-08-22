@@ -10,10 +10,12 @@ class Worker:
         #self.historic_url, self.predictions_url = self.load_urls('data/urls.txt')
         self.historic_url = 'https://drive.google.com/uc?id=12IUAsaeNNcNbIgXsXcR0UBqrKPx-ZncK'
         self.predictions_url = 'https://drive.google.com/uc?id=1EofTofvRwQylkT_e8C0L5Iy0yUVO46dz'
+        self.pred5days_url = 'https://drive.google.com/uc?id=1vTwOSjkZSpTqR6RYtVgKK0AEn5XBE4Dt'
         # Define local paths for caching
         self.data_dir = 'data'
         self.historic_cache_path = os.path.join(self.data_dir, 'historic_data.csv')
         self.predictions_cache_path = os.path.join(self.data_dir, 'predictions_data.csv')
+        self.pred5days_cache_path = os.path.join(self.data_dir, 'predictions5days_data.csv')
 
         # Create the data directory if it doesn't exist
         os.makedirs(self.data_dir, exist_ok=True)
@@ -49,9 +51,18 @@ class Worker:
         else:
             predictions_df = pd.read_csv(self.predictions_cache_path)
 
+        # Check if predictions data should be downloaded
+        if not os.path.exists(self.pred5days_cache_path):
+            self.download_csv(self.pred5days_url, self.pred5days_cache_path)
+            pred5d_df = pd.read_csv(self.pred5days_cache_path)
+        else:
+            pred5d_df = pd.read_csv(self.pred5days_cache_path)
+
+
         # Convert 'datetime' columns to datetime objects
         historic_df['datetime'] = pd.to_datetime(historic_df['datetime'])
         predictions_df['datetime'] = pd.to_datetime(predictions_df['datetime'])
+        pred5d_df['day'] = pd.to_datetime(pred5d_df['day'])
 
         # Check if the current historic data matches the cached historic data
         current_historic_df = pd.read_csv(self.historic_url)
@@ -63,10 +74,11 @@ class Worker:
             historic_df.to_csv(self.historic_cache_path, index=False)
             self.download_csv(self.predictions_url, self.predictions_cache_path)
             predictions_df = pd.read_csv(self.predictions_cache_path)
+            self.download_csv(self.predictions_url, self.predictions_cache_path)
+            pred5d_df = pd.read_csv(self.pred5days_cache_path)
+        return self.ProcessData(historic_df, predictions_df, pred5d_df)
 
-        return self.ProcessData(historic_df, predictions_df)
-
-    def ProcessData(self, historic_df, predictions_df):
+    def ProcessData(self, historic_df, predictions_df, pred5d_df):
         # Get the last item from the 'temperature' column
         last_temperature = historic_df['temperature'].iloc[-1]
 
@@ -118,12 +130,15 @@ class Worker:
         # Calculate today's max and min temperatures
         max_temp, min_temp = self.TodaysMaxMin(historic_df, predictions_df)
 
-        return int(last_temperature), formatted_datetime, dates, date_hour_temp_map, max_temp, min_temp
+        return int(last_temperature), formatted_datetime, dates, date_hour_temp_map, max_temp, min_temp, pred5d_df
     
     def TodaysMaxMin(self, historic_df, predictions_df):
         # Ensure 'datetime' columns are in datetime format
         historic_df['datetime'] = pd.to_datetime(historic_df['datetime'])
         predictions_df['datetime'] = pd.to_datetime(predictions_df['datetime'])
+
+        # Rename the 'predictions' column in predictions_df to 'temperature' for merging
+        predictions_df.rename(columns={'predictions': 'temperature'}, inplace=True)
 
         # Get today's date
         today_date = pd.Timestamp.now().normalize()
@@ -132,22 +147,33 @@ class Worker:
         today_df = historic_df[historic_df['datetime'].dt.date == today_date.date()]
         today_pred = predictions_df[predictions_df['datetime'].dt.date == today_date.date()]
 
-        # Check if today_df has fewer than 24 records
-        if len(today_df) < 24:
-            # Get the last datetime entry from today_df
-            if not today_df.empty:
-                last_datetime = today_df['datetime'].max()
-                # Filter the prediction data for times after the last entry from today_df
+        # Merge the dataframes on 'datetime'
+        merged_df = pd.merge(today_df, today_pred, on='datetime', how='outer')
+
+        # Combine the temperature data from both sources
+        merged_df['temperature'] = merged_df['temperature_x'].combine_first(merged_df['temperature_y'])
+
+        # Drop unnecessary columns after merging
+        merged_df.drop(columns=['temperature_x', 'temperature_y'], inplace=True)
+
+        # Check if merged_df has fewer than 24 records
+        if len(merged_df) < 24:
+            # Get the last datetime entry from merged_df
+            if not merged_df.empty:
+                last_datetime = merged_df['datetime'].max()
+                # Filter the prediction data for times after the last entry from merged_df
                 additional_data = today_pred[today_pred['datetime'] > last_datetime]
-                # Append additional data to today_df
-                today_df = pd.concat([today_df, additional_data]).drop_duplicates().reset_index(drop=True)
+                # Merge additional data into merged_df
+                merged_df = pd.concat([merged_df, additional_data]).drop_duplicates().reset_index(drop=True)
 
         # Calculate the max and min temperatures
-        max_temp = today_df['temperature'].max()
-        min_temp = today_df['temperature'].min()
+        max_temp = merged_df['temperature'].max()
+        min_temp = merged_df['temperature'].min()
 
         # Return as integer
         return int(max_temp), int(min_temp)
+
+
 
     def PrepareTableData(self, last_24_predictions):
         # Ensure 'datetime' column is used as the index

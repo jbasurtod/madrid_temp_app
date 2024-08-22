@@ -21,7 +21,7 @@
                 <div class="temp">{{ last_temperature }}<span>°c</span></div>
                 <div class="hi-low">{{ max }}°c / {{ min }}°c</div>
             </div>
-            <div class="title-table">Forecast:</div>
+            <div class="title-table">24-hour Forecast:</div>
             <!-- Table for last 24 predictions -->
             <div class="table-container">
                 <table>
@@ -50,6 +50,32 @@
                                 {% endfor %}
                             {% endfor %}
                         </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- New Table for 5-Day Forecast -->
+            <div class="title-table-forecast">5-Day Forecast:</div>
+            <div class="table-container-forecast">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Day</th>
+                            <th>Average</th>
+                            <th>Min</th>
+                            <th>Max</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Display 5-day forecast dynamically -->
+                        {% for forecast in forecast_5d %}
+                            <tr>
+                                <td class="day">{{ forecast.day }}</td>
+                                <td class="forecast">{{ forecast.mean_temp }}°</td>
+                                <td class="forecast">{{ forecast.min_temp }}°</td>
+                                <td class="forecast">{{ forecast.max_temp }}°</td>
+                            </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
