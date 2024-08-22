@@ -4,7 +4,7 @@
 
 ## Overview
 
-The <a href="http://bit.ly/madridtemp">**Madrid Temperature App**</a> is a Python-based application that retrieves, processes, and displays weather predictions for Madrid. The app is designed to provide users with the latest temperature data, as well as forecasts for the next 24 hours.
+The <a href="http://bit.ly/madridtemp" target="_blank">**Madrid Temperature App**</a> is a Python-based application that retrieves, processes, and displays weather predictions for Madrid. The app is designed to provide users with the latest temperature data, as well as forecasts for the next 24 hours.
 
 ## Features
 
