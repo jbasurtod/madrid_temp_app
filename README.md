@@ -1,5 +1,7 @@
 # Madrid Temperature App
 
+<img href="https://github.com/jbasurtod/madrid_temp_app/blob/main/img/live_app.png" width="300" />
+
 ## Overview
 
 The **Madrid Temperature App** is a Python-based application that retrieves, processes, and displays weather predictions for Madrid. The app is designed to provide users with the latest temperature data, as well as forecasts for the next 24 hours.
