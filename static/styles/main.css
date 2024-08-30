@@ -123,7 +123,7 @@ main {
 }
 .table-container-forecast {
   width: 100%; /* Use full width of the parent container */
-  max-width: 600px; /* Limit max width */
+  max-width: 500px; /* Limit max width */
   overflow-x: auto; /* Enables horizontal scrolling */
   white-space: nowrap; /* Prevents wrapping of table contents */
   margin: 10px 0px 100px; /* Adds vertical spacing around the table */
@@ -163,7 +163,7 @@ th {
   font-size: 25px; /* Further adjust size for date columns */
 }
 .table-container-forecast td.day {
-  font-size: 18px; /* Further adjust size for date columns */
+  font-size: 20px; /* Further adjust size for date columns */
 }
 
 td {
@@ -310,7 +310,7 @@ td[data-temp] {
     font-size: 20px; /* Further adjust size for date columns */
   }
   .table-container-forecast td.day {
-    font-size: 13px; /* Further adjust size for date columns */
+    font-size: 18px; /* Further adjust size for date columns */
   }
   td {
     font-size: 12px; /* Further adjust font size */
@@ -577,3 +577,23 @@ main {
 }
 
 /* Other existing styles... */
+.forecast {
+  text-align: center;
+}
+
+.forecast-avg {
+  font-size: 30px; /* Adjust as needed */
+}
+
+.forecast-min-max {
+  font-size: 18px; /* Smaller font size for min and max */
+  color: #666; /* Optional: color for min and max temperatures */
+}
+
+.forecast-max {
+  font-weight: bold;
+}
+
+.forecast-min {
+  font-weight: normal;
+}

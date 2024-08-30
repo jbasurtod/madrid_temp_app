@@ -56,15 +56,14 @@
             </div>
 
             <!-- New Table for 5-Day Forecast -->
+            <!-- New Table for 5-Day Forecast -->
             <div class="title-table-forecast">5-Day Forecast:</div>
             <div class="table-container-forecast">
                 <table>
                     <thead>
                         <tr>
                             <th>Day</th>
-                            <th>Average</th>
-                            <th>Min</th>
-                            <th>Max</th>
+                            <th>Forecast</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -72,14 +71,19 @@
                         {% for forecast in forecast_5d %}
                             <tr>
                                 <td class="day">{{ forecast.day }}</td>
-                                <td class="forecast">{{ forecast.mean_temp }}°</td>
-                                <td class="forecast">{{ forecast.min_temp }}°</td>
-                                <td class="forecast">{{ forecast.max_temp }}°</td>
+                                <td class="forecast">
+                                    <div class="forecast-avg">{{ forecast.mean_temp }}°</div>
+                                    <div class="forecast-min-max">
+                                        <span class="forecast-max">{{ forecast.max_temp }}°</span> / 
+                                        <span class="forecast-min">{{ forecast.min_temp }}°</span>
+                                    </div>
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
+
         </main>
     </div>
     <footer class="footer">
@@ -94,7 +98,7 @@
             <h2>About This Page</h2>
             <p class="info">This project showcases a productized XGBoost time series model, trained with historical temperature data from Madrid's open data portal. The model is used to predict hourly temperatures in Barrio San Isidro, Madrid, forecasting the next 24 hours. You can view a real time evaluation of <a href="https://predicting-madrid-temp.streamlit.app/" target="_blank">the model here.</a>
             <br><br>
-            The Madrid <a href="https://datos.madrid.es/portal/site/egob/menuitem.c05c1f754a33a9fbe4b2e4b284f1a5a0/?vgnextoid=4985724ec1acd610VgnVCM1000001d4a900aRCRD&vgnextchannel=374512b9ace9f310VgnVCM100000171f5a0aRCRD&vgnextfmt=default" target="_blank">Open Data portal</a> updates the latest temperature data on the 30th minute of every hour. Using Airflow and Google Drive, a continuous forecasting deployment process constantly evaluates the model performance and predicts the next temperatures.
+            The Madrid <a href="https://datos.madrid.es/portal/site/egob/menuitem.c05c1f754a33a9fbe4b2e4b284f1a5a0/?vgnextoid=4985724ec1acd610VgnVCM1000001d4a900aRCRD&vgnextchannel=374512b9ace9f310VgnVCM100000171f5a0aRCRD&vgnextfmt=default" target="_blank">Open Data portal</a> updates the latest temperature data on the 30th minute of every hour. Using Airflow and Google Drive, a continuous forecasting deployment process constantly evaluates the model performance and predicts the next temperatures. Current model: {{current_model}}
             <br><br><br>
             This project has been created by <a href="mailto:jbasurtod@gmail.com">Juan Carlos Basurto</a>.
             <br><br>[ <a href="https://www.linkedin.com/in/jbasurtod/" target="_blank">Linkedin</a> ] [ <a href="https://github.com/jbasurtod" target="_blank">GitHub</a> ]</p>

@@ -16,6 +16,7 @@ class Worker:
         self.historic_cache_path = os.path.join(self.data_dir, 'historic_data.csv')
         self.predictions_cache_path = os.path.join(self.data_dir, 'predictions_data.csv')
         self.pred5days_cache_path = os.path.join(self.data_dir, 'predictions5days_data.csv')
+        self.last_dt = os.path.join(self.data_dir, 'lastdt.txt')
 
         # Create the data directory if it doesn't exist
         os.makedirs(self.data_dir, exist_ok=True)
@@ -72,10 +73,13 @@ class Worker:
             # Historic data has changed, update the cache and download new predictions data
             historic_df = current_historic_df
             historic_df.to_csv(self.historic_cache_path, index=False)
+            
             self.download_csv(self.predictions_url, self.predictions_cache_path)
             predictions_df = pd.read_csv(self.predictions_cache_path)
-            self.download_csv(self.predictions_url, self.predictions_cache_path)
-            pred5d_df = pd.read_csv(self.pred5days_cache_path)
+
+        self.download_csv(self.pred5days_url, self.pred5days_cache_path)
+        pred5d_df = pd.read_csv(self.pred5days_cache_path)
+        pred5d_df['day'] = pd.to_datetime(pred5d_df['day'])
         return self.ProcessData(historic_df, predictions_df, pred5d_df)
 
     def ProcessData(self, historic_df, predictions_df, pred5d_df):
@@ -91,8 +95,8 @@ class Worker:
         # Format the datetime as "August 21, 12:30"
         formatted_datetime = last_temp_datetime_plus_30.strftime('%B %d, %H:%M')
 
-        # Get the last 24 items from the 'pred_xgb' column
-        last_24_predictions = predictions_df[['datetime', 'pred_xgb']].tail(24)
+        # Get the last 24 items from the 'predictions' column
+        last_24_predictions = predictions_df[['datetime', 'predictions']].tail(24)
 
         # Define the Madrid time zone
         madrid_timezone = pytz.timezone('Europe/Madrid')
@@ -113,7 +117,7 @@ class Worker:
         # Compare the timezone-aware current_datetime to the timezone-aware first_datetime
         if current_datetime > first_datetime:
             # Pop the first datetime and update last_temperature
-            first_temp = last_24_predictions['pred_xgb'].iloc[0]
+            first_temp = last_24_predictions['predictions'].iloc[0]
 
             # Remove the first item
             last_24_predictions = last_24_predictions.iloc[1:]
@@ -130,7 +134,9 @@ class Worker:
         # Calculate today's max and min temperatures
         max_temp, min_temp = self.TodaysMaxMin(historic_df, predictions_df)
 
-        return int(last_temperature), formatted_datetime, dates, date_hour_temp_map, max_temp, min_temp, pred5d_df
+        current_model = predictions_df['model'].tail(1).tolist()[0]
+
+        return int(last_temperature), formatted_datetime, dates, date_hour_temp_map, max_temp, min_temp, pred5d_df, current_model
 
     def TodaysMaxMin(self, historic_df, predictions_df):
         # Ensure 'datetime' columns are in datetime format
@@ -173,7 +179,11 @@ class Worker:
         # Return as integer
         return int(max_temp), int(min_temp)
 
-
+    def save_datetime_to_file(self,file_path):
+        """Saves the current datetime to a file, overwriting any existing content."""
+        current_datetime = datetime.now()
+        with open(file_path, 'w') as file:
+            file.write(current_datetime.isoformat())
 
     def PrepareTableData(self, last_24_predictions):
         # Ensure 'datetime' column is used as the index
@@ -193,7 +203,7 @@ class Worker:
             date_data = last_24_predictions[last_24_predictions.index.normalize() == date]
             date_hour_temp_map[date.strftime('%B %d')] = {
                 'hours': date_data.index.strftime('%H:%M').tolist(),
-                'temperatures': date_data['pred_xgb'].round().astype(int).tolist()
+                'temperatures': date_data['predictions'].round().astype(int).tolist()
             }
 
         return dates, date_hour_temp_map

@@ -6,7 +6,7 @@ app = Flask(__name__)
 @app.route('/madridtemp')
 def index():
     worker = Worker()
-    last_temperature, formatted_datetime, dates, date_hour_temp_map, max_temp, min_temp, pred5d_df = worker.GetData()
+    last_temperature, formatted_datetime, dates, date_hour_temp_map, max_temp, min_temp, pred5d_df, current_model = worker.GetData()
 
     # Modify 'day' column to display as "Weekday DayNumber"
     pred5d_df['day'] = pred5d_df['day'].dt.strftime('%A %d')
@@ -35,7 +35,8 @@ def index():
         max_hours=max_hours,
         max=max_temp,
         min=min_temp,
-        forecast_5d=forecast_5d  # Pass the forecast data to the template
+        forecast_5d=forecast_5d,  # Pass the forecast data to the template
+        current_model=current_model
     )
 
 
