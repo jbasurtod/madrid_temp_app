@@ -11,7 +11,7 @@ app = Flask(__name__)
 # Configuration for file uploads
 app.config['UPLOAD_FOLDER'] = 'uploads'  # Directory where files will be saved
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # Max size of file (16MB)
-SECRET_PASSWORD = 'fqacdp0ov0w1bce6w274sdhczys9iq'  # Define a secret password for validation
+SECRET_PASSWORD = ''  # Define a secret password for validation
 
 # Ensure the upload folder exists
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
