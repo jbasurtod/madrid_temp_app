@@ -41,14 +41,16 @@ class Worker:
 
     def GetData(self):
         # Descargar consolidado
-        self.download_csv(self.predictions_url, self.predictions_cache_path)
+        if not os.path.isfile(self.predictions_cache_path):
+            self.download_csv(self.predictions_url, self.predictions_cache_path)
+        if not os.path.isfile(self.pred5days_cache_path):
+            self.download_csv(self.pred5days_url, self.pred5days_cache_path)
+        
+        # Cargar predictions
         predictions_df = pd.read_csv(self.predictions_cache_path)
-
         # Convertir columna de consolidado en historic
         historic_df = predictions_df[['datetime','18']].rename(columns={'18':'temperature'}).dropna()
-
-        # Descargar pred5days
-        self.download_csv(self.pred5days_url, self.pred5days_cache_path)
+        # Cargar pred5days
         pred5d_df = pd.read_csv(self.pred5days_cache_path)
 
         # Convert 'datetime' columns to datetime objects

@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from Worker import Worker
 import os
 import time
@@ -7,6 +7,14 @@ os.environ['TZ'] = 'Europe/Madrid'
 time.tzset()
 
 app = Flask(__name__)
+
+# Configuration for file uploads
+app.config['UPLOAD_FOLDER'] = 'uploads'  # Directory where files will be saved
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # Max size of file (16MB)
+SECRET_PASSWORD = 'fqacdp0ov0w1bce6w274sdhczys9iq'  # Define a secret password for validation
+
+# Ensure the upload folder exists
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 @app.route('/madridtemp')
 def index():
@@ -39,10 +47,48 @@ def index():
         max_hours=max_hours,
         max=max_temp,
         min=min_temp,
-        forecast_5d=forecast_5d,  # Pass the forecast data to the template
+        forecast_5d=forecast_5d,
         current_model=current_model
     )
 
+@app.route('/uploadfiles', methods=['GET', 'POST'])
+def upload_files():
+    if request.method == 'POST':
+        # Get the password from the form
+        password = request.form.get('password')
+        
+        # Verify if the password is correct
+        if password != SECRET_PASSWORD:
+            return 'Invalid password, files not uploaded.', 403
+
+        # Check if files were uploaded
+        if 'file1' not in request.files or 'file2' not in request.files:
+            return 'No file part', 400
+
+        file1 = request.files['file1']
+        file2 = request.files['file2']
+
+        # Check if both files are selected
+        if file1.filename == '' or file2.filename == '':
+            return 'No selected files', 400
+        
+        # Save the files to the configured directory
+        file1.save(os.path.join('data', 'predictions_data.csv'))
+        file2.save(os.path.join('data', 'predictions5days_data.csv'))
+
+        return 'Files successfully uploaded!', 200
+
+    return '''
+    <!doctype html>
+    <title>Upload Files</title>
+    <h1>Upload two files</h1>
+    <form method=post enctype=multipart/form-data>
+      Password: <input type="password" name="password"><br><br>
+      File 1: <input type=file name=file1><br><br>
+      File 2: <input type=file name=file2><br><br>
+      <input type=submit value=Upload>
+    </form>
+    '''
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
