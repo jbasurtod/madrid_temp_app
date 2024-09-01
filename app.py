@@ -1,5 +1,10 @@
 from flask import Flask, render_template
 from Worker import Worker
+import os
+import time
+
+os.environ['TZ'] = 'Europe/Madrid'
+time.tzset()
 
 app = Flask(__name__)
 
@@ -13,7 +18,6 @@ def index():
     pred5d_df['mean_temp'] = pred5d_df['mean_temp'].round(0).astype(int)
     pred5d_df['min_temp'] = pred5d_df['min_temp'].round(0).astype(int)
     pred5d_df['max_temp'] = pred5d_df['max_temp'].round(0).astype(int)
-
 
     # Determine max number of hours for column headers
     max_hours = max(len(date_hour_temp_map[date]['hours']) for date in dates)

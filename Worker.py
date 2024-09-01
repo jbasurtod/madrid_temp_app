@@ -40,46 +40,22 @@ class Worker:
             f.write(response.content)
 
     def GetData(self):
-        # Load or download the historic data
-        if not os.path.exists(self.historic_cache_path):
-            self.download_csv(self.historic_url, self.historic_cache_path)
-        historic_df = pd.read_csv(self.historic_cache_path)
+        # Descargar consolidado
+        self.download_csv(self.predictions_url, self.predictions_cache_path)
+        predictions_df = pd.read_csv(self.predictions_cache_path)
 
-        # Check if predictions data should be downloaded
-        if not os.path.exists(self.predictions_cache_path):
-            self.download_csv(self.predictions_url, self.predictions_cache_path)
-            predictions_df = pd.read_csv(self.predictions_cache_path)
-        else:
-            predictions_df = pd.read_csv(self.predictions_cache_path)
+        # Convertir columna de consolidado en historic
+        historic_df = predictions_df[['datetime','18']].rename(columns={'18':'temperature'}).dropna()
 
-        # Check if predictions data should be downloaded
-        if not os.path.exists(self.pred5days_cache_path):
-            self.download_csv(self.pred5days_url, self.pred5days_cache_path)
-            pred5d_df = pd.read_csv(self.pred5days_cache_path)
-        else:
-            pred5d_df = pd.read_csv(self.pred5days_cache_path)
-
+        # Descargar pred5days
+        self.download_csv(self.pred5days_url, self.pred5days_cache_path)
+        pred5d_df = pd.read_csv(self.pred5days_cache_path)
 
         # Convert 'datetime' columns to datetime objects
         historic_df['datetime'] = pd.to_datetime(historic_df['datetime'])
         predictions_df['datetime'] = pd.to_datetime(predictions_df['datetime'])
         pred5d_df['day'] = pd.to_datetime(pred5d_df['day'])
-
-        # Check if the current historic data matches the cached historic data
-        current_historic_df = pd.read_csv(self.historic_url)
-        current_historic_df['datetime'] = pd.to_datetime(current_historic_df['datetime'])
-
-        if not historic_df.equals(current_historic_df):
-            # Historic data has changed, update the cache and download new predictions data
-            historic_df = current_historic_df
-            historic_df.to_csv(self.historic_cache_path, index=False)
-            
-            self.download_csv(self.predictions_url, self.predictions_cache_path)
-            predictions_df = pd.read_csv(self.predictions_cache_path)
-
-        self.download_csv(self.pred5days_url, self.pred5days_cache_path)
-        pred5d_df = pd.read_csv(self.pred5days_cache_path)
-        pred5d_df['day'] = pd.to_datetime(pred5d_df['day'])
+        
         return self.ProcessData(historic_df, predictions_df, pred5d_df)
 
     def ProcessData(self, historic_df, predictions_df, pred5d_df):
@@ -151,8 +127,8 @@ class Worker:
 
         # Filter today's data
         today_df = historic_df[historic_df['datetime'].dt.date == today_date.date()]
-        today_pred = predictions_df[predictions_df['datetime'].dt.date == today_date.date()]
-
+        today_pred = (predictions_df[predictions_df['datetime'].dt.date == today_date.date()]).round(0)
+        #print(today_pred)
         # Merge the dataframes on 'datetime'
         merged_df = pd.merge(today_df, today_pred, on='datetime', how='outer')
 
@@ -188,7 +164,6 @@ class Worker:
     def PrepareTableData(self, last_24_predictions):
         # Ensure 'datetime' column is used as the index
         last_24_predictions.set_index('datetime', inplace=True)
-
         # Convert index to DatetimeIndex and format as hours
         last_24_predictions.index = pd.to_datetime(last_24_predictions.index)
         hours = last_24_predictions.index.strftime('%H:%M').tolist()

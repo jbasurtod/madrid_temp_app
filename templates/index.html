@@ -96,12 +96,13 @@
         <div class="modal-content">
             <span class="close-btn" id="close-btn">&times;</span>
             <h2>About This Page</h2>
-            <p class="info">This project showcases a productized XGBoost time series model, trained with historical temperature data from Madrid's open data portal. The model is used to predict hourly temperatures in Barrio San Isidro, Madrid, forecasting the next 24 hours. You can view a real time evaluation of <a href="https://predicting-madrid-temp.streamlit.app/" target="_blank">the model here.</a>
+            <p class="info">This project showcases two productized XGBoost and LSTM time series models trained with historical temperature data from Madrid's open data portal. The models are used to predict hourly temperatures in Barrio San Isidro, Madrid, forecasting the next 24 hours and next 5 days. You can view a real time evaluation of <a href="https://predicting-madrid-temp.streamlit.app/" target="_blank">the model here.</a>
             <br><br>
-            The Madrid <a href="https://datos.madrid.es/portal/site/egob/menuitem.c05c1f754a33a9fbe4b2e4b284f1a5a0/?vgnextoid=4985724ec1acd610VgnVCM1000001d4a900aRCRD&vgnextchannel=374512b9ace9f310VgnVCM100000171f5a0aRCRD&vgnextfmt=default" target="_blank">Open Data portal</a> updates the latest temperature data on the 30th minute of every hour. Using Airflow and Google Drive, a continuous forecasting deployment process constantly evaluates the model performance and predicts the next temperatures. Current model: {{current_model}}
+            The Madrid <a href="https://datos.madrid.es/portal/site/egob/menuitem.c05c1f754a33a9fbe4b2e4b284f1a5a0/?vgnextoid=4985724ec1acd610VgnVCM1000001d4a900aRCRD&vgnextchannel=374512b9ace9f310VgnVCM100000171f5a0aRCRD&vgnextfmt=default" target="_blank">Open Data portal</a> updates the latest temperature data around the 30th minute of every hour. Using Airflow and Google Drive, a continuous forecasting process constantly evaluates the model performance, predicts the next temperatures and selects the model with the best performance to be used in this website. Current model: {{current_model}}.
             <br><br><br>
             This project has been created by <a href="mailto:jbasurtod@gmail.com">Juan Carlos Basurto</a>.
-            <br><br>[ <a href="https://www.linkedin.com/in/jbasurtod/" target="_blank">Linkedin</a> ] [ <a href="https://github.com/jbasurtod" target="_blank">GitHub</a> ]</p>
+            <br><br>[ <a href="https://www.linkedin.com/in/jbasurtod/" target="_blank">My Linkedin</a> ] [ <a href="https://github.com/jbasurtod" target="_blank">My GitHub</a> ]
+        <br><p style="font-size:7pt;">Origen de los datos de tiempo real: Ayuntamiento de Madrid. This app is not related in any way with Ayuntamiento de Madrid.</p></p>
         </div>
     </div>
 
