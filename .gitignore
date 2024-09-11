@@ -1,4 +1,5 @@
 # Ignore the urls.txt file inside the data directory
 data/urls.txt
+nlp_data/
 
 __pycache__/

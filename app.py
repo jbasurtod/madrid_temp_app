@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, Response
 from Worker import Worker
 import os
 import time
@@ -123,10 +123,8 @@ DATA_FOLDER = 'nlp_data'
 def sentiment_analysis():
     return render_template('voiceanalysis.html')
 
-# Route that receives the ID and returns the corresponding data from the JSON file
 @app.route('/get-analysis-data', methods=['GET'])
 def get_analysis_data():
-    # Get the ID from the AJAX request (query parameter)
     analysis_id = request.args.get('id')
 
     if not analysis_id:
@@ -137,7 +135,6 @@ def get_analysis_data():
 
     # Check if the file exists
     if not os.path.exists(file_path):
-        # If the file doesn't exist, return a JSON with status "not yet created"
         return jsonify({'status': 'not yet created'})
 
     # Load the JSON data from the file
@@ -145,6 +142,34 @@ def get_analysis_data():
         data = json.load(json_file)
 
     return jsonify(data)
+
+
+
+# SSE route for streaming analysis data in real-time
+@app.route('/stream-analysis-data', methods=['GET'])
+def stream_analysis_data():
+    analysis_id = request.args.get('id')
+
+    if not analysis_id:
+        return jsonify({'error': 'No ID provided'}), 400
+
+    file_path = os.path.join(DATA_FOLDER, f'{analysis_id}.json')
+
+    def generate():
+        while True:
+            # Check if the file exists
+            if not os.path.exists(file_path):
+                yield f"data: {json.dumps({'status': 'not yet created'})}\n\n"
+            else:
+                # Load the JSON data from the file
+                with open(file_path, 'r', encoding='utf-8') as json_file:
+                    data = json.load(json_file)
+
+                yield f"data: {json.dumps(data)}\n\n"
+
+            time.sleep(3)  # Simulate waiting for new data
+
+    return Response(generate(), content_type='text/event-stream')
 
 @app.route('/updatesentiment', methods=['GET'])
 def update_sentiment():

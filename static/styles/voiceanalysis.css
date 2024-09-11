@@ -47,7 +47,7 @@ h1 {
 /* Style for the main text */
 #text, #sentiment-label, #sentiment-score, #error-message {
     font-family: 'Roboto', sans-serif; /* Main text font */
-    font-size: 20px;
+    font-size: 25px;
 }
 
 /* Styles for different sentiment labels */
@@ -98,4 +98,13 @@ button:hover {
 /* Hide elements */
 .hidden {
     display: none;
+}
+/* Apply the Nerko One font to the title */
+.title {
+    font-family: 'Nerko One', cursive;
+    font-size: 70px; /* Adjust size as needed */
+    color: white; /* Adjust color as needed */
+    text-align: center; /* Center-align the title */
+    margin: 20px 0; /* Adjust spacing as needed */
+    text-shadow: 2px 4px 30px rgba(0, 0, 0, 0.3); /* Add shadow */
 }
