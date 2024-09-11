@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/voiceanalysis.css') }}">
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="logo">
+    </header>
+    <div id="initial-view" class="content-box">
+        <h1>Enter ID to Begin</h1>
+        <div class="input-container">
+            <input type="text" id="id-input" placeholder="Enter ID here">
+            <button onclick="handleIDSubmit()">Submit</button>
+        </div>
+    </div>
+    <div id="main-view" class="content-box hidden">
+        <h1 id="main-title">Sentiment Analysis for ID: </h1>
+        <div id="info">
+            <div id="text">Text: Waiting for data...</div>
+            <div id="sentiment-label">Sentiment: Waiting for data...</div>
+            <div id="sentiment-score">Score: Waiting for data...</div>
+            <div id="error-message"></div> <!-- To show error messages -->
+        </div>
+    </div>
+
+    <script>
+        let currentID = null;
+        let pollingInterval = null;
+
+        function handleIDSubmit() {
+            const idInput = document.getElementById('id-input').value;
+            if (idInput) {
+                currentID = idInput;
+                document.getElementById('initial-view').classList.add('hidden');
+                document.getElementById('main-view').classList.remove('hidden');
+                document.getElementById('main-title').innerText = `Sentiment Analysis for ID: ${currentID}`; // Update title with ID
+                fetchAnalysisData(currentID);  // Fetch data for the entered ID
+                if (pollingInterval) {
+                    clearInterval(pollingInterval); // Clear any existing interval
+                }
+                pollingInterval = setInterval(() => fetchAnalysisData(currentID), 3000); // Start polling
+            } else {
+                alert('Please enter a valid ID.');
+            }
+        }
+
+        function fetchAnalysisData(analysisID) {
+            fetch(`/get-analysis-data?id=${analysisID}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById("error-message").innerHTML = "Error: " + data.error;
+                        return;
+                    }
+
+                    if (data.status === "recording") {
+                        document.getElementById("text").innerHTML = "Status: <span class='status-recording'>Recording</span>";
+                    } else if (data.status === "processing") {
+                        document.getElementById("text").innerHTML = "Status: <span class='status-processing'>Processing</span>";
+                    } else if (data.status !== "done") {
+                        document.getElementById("text").innerHTML = "Status: " + data.status;
+                        document.getElementById("sentiment-label").innerHTML = "";
+                        document.getElementById("sentiment-score").innerHTML = "";
+                        return;
+                    } else {
+                        document.getElementById("text").innerHTML = "Text: " + data.text;
+                        const sentimentLabel = data.sentiment[0].label;
+                        const sentimentDiv = document.getElementById("sentiment-label");
+
+                        if (sentimentLabel === 'POS') {
+                            sentimentDiv.innerHTML = "Sentiment: Positive";
+                            sentimentDiv.className = "positive";
+                        } else if (sentimentLabel === 'NEG') {
+                            sentimentDiv.innerHTML = "Sentiment: Negative";
+                            sentimentDiv.className = "negative";
+                        } else if (sentimentLabel === 'NEU') {
+                            sentimentDiv.innerHTML = "Sentiment: Neutral";
+                            sentimentDiv.className = "neutral";
+                        }
+
+                        document.getElementById("sentiment-score").innerHTML = 
+                            "Score: " + data.sentiment[0].score.toFixed(3);
+                    }
+                })
+                .catch(error => console.error('Error fetching sentiment data:', error));
+        }
+
+        // Handle Enter key for submitting ID
+        document.getElementById('id-input').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                handleIDSubmit();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,8 +1,10 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from Worker import Worker
 import os
 import time
-
+import random
+import json
+from urllib.parse import unquote
 os.environ['TZ'] = 'Europe/Madrid'
 time.tzset()
 
@@ -11,7 +13,7 @@ app = Flask(__name__)
 # Configuration for file uploads
 app.config['UPLOAD_FOLDER'] = 'uploads'  # Directory where files will be saved
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # Max size of file (16MB)
-SECRET_PASSWORD = ''  # Define a secret password for validation
+SECRET_PASSWORD = 'fqacdp0ov0w1bce6w274sdhczys9iq'  # Define a secret password for validation
 
 # Ensure the upload folder exists
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -89,6 +91,89 @@ def upload_files():
       <input type=submit value=Upload>
     </form>
     '''
+
+@app.route('/uploadsentiment', methods=['POST'])
+def uploadsentiment():
+    if request.method == 'POST':
+        # Get the password from the form
+        password = request.form.get('password')
+        
+        # Verify if the password is correct
+        if password != SECRET_PASSWORD:
+            return 'Invalid password, files not uploaded.', 403
+
+        # Get the filename and output from the form data
+        filename = request.form.get('filename')
+        output = request.form.get('output')
+
+        if not filename or not output:
+            return 'Missing filename or output data.', 400
+
+        # Save the data to a file
+        with open(f'nlp_data/{filename}_eval.txt', 'w') as f:
+            f.write(output)
+
+        return 'Files successfully uploaded!', 200
+        
+# Path to the folder containing JSON files
+DATA_FOLDER = 'nlp_data'
+
+# Route to serve the main voice analysis page
+@app.route('/voiceanalysis')
+def sentiment_analysis():
+    return render_template('voiceanalysis.html')
+
+# Route that receives the ID and returns the corresponding data from the JSON file
+@app.route('/get-analysis-data', methods=['GET'])
+def get_analysis_data():
+    # Get the ID from the AJAX request (query parameter)
+    analysis_id = request.args.get('id')
+
+    if not analysis_id:
+        return jsonify({'error': 'No ID provided'}), 400
+
+    # Construct the file path using the ID
+    file_path = os.path.join(DATA_FOLDER, f'{analysis_id}.json')
+
+    # Check if the file exists
+    if not os.path.exists(file_path):
+        # If the file doesn't exist, return a JSON with status "not yet created"
+        return jsonify({'status': 'not yet created'})
+
+    # Load the JSON data from the file
+    with open(file_path, 'r', encoding='utf-8') as json_file:
+        data = json.load(json_file)
+
+    return jsonify(data)
+
+@app.route('/updatesentiment', methods=['GET'])
+def update_sentiment():
+    password = request.args.get('password')
+    
+    if password != SECRET_PASSWORD:
+        return 'Invalid password, files not uploaded.', 403
+    
+    analysis_id = request.args.get('id')
+    json_data_str = request.args.get('json')
+    
+    if not analysis_id or not json_data_str:
+        return jsonify({'error': 'ID or JSON data not provided'}), 400
+
+    # URL decode the JSON string
+    json_data_str = unquote(json_data_str)
+
+    try:
+        json_data_dict = json.loads(json_data_str)
+    except json.JSONDecodeError:
+        return jsonify({'error': 'Invalid JSON data'}), 400
+
+    file_path = os.path.join(DATA_FOLDER, f'{analysis_id}.json')
+
+    # Save the data to the corresponding JSON file
+    with open(file_path, 'w', encoding='utf-8') as json_file:
+        json.dump(json_data_dict, json_file, ensure_ascii=False, indent=4)
+
+    return jsonify({'status': 'success', 'message': f'Data saved for ID {analysis_id}'})
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)

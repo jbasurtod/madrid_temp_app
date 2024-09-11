@@ -1,0 +1,10 @@
+{
+    "status": "done",
+    "text": "Estoy muy contento aquí en mi computadora. Más tarde voy a jugar vóley y genial.",
+    "sentiment": [
+        {
+            "label": "POS",
+            "score": 0.9976801872253418
+        }
+    ]
+}

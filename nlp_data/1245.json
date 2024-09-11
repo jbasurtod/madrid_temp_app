@@ -1,0 +1,10 @@
+{
+    "status": "done",
+    "text": "Hoy fui a caminar al parque y me encontré a una persona que me saludó y me puse muy contento.",
+    "sentiment": [
+        {
+            "label": "POS",
+            "score": 0.9980803728103638
+        }
+    ]
+}

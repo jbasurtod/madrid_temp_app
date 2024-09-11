@@ -1,0 +1,101 @@
+/* Style for the overall page background */
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column; /* Stack header and content vertically */
+    align-items: center;
+    justify-content: center;
+    background: #ffd89b;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #19547b, #ffd89b);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #19547b, #ffd89b); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    font-family: Arial, sans-serif; /* Fallback font */
+}
+
+/* Style for the header and logo */
+header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px; /* Space between logo and content box */
+}
+
+.logo {
+    width: 300px; /* Adjust width as needed */
+    height: auto; /* Maintain aspect ratio */
+}
+
+/* Style for the centered box */
+.content-box {
+    background-color: white;
+    border-radius: 15px;  /* Semi-rounded edges */
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 80%;
+    max-width: 600px;
+    height: 500px; /* Fixed height */
+    text-align: center;
+    overflow-y: auto; /* Add scrollbar if content overflows */
+    justify-content: space-between;
+}
+
+/* Style for the title */
+h1 {
+    font-family: 'Helvetica', sans-serif; /* Title font */
+}
+
+/* Style for the main text */
+#text, #sentiment-label, #sentiment-score, #error-message {
+    font-family: 'Roboto', sans-serif; /* Main text font */
+    font-size: 20px;
+}
+
+/* Styles for different sentiment labels */
+.positive {
+    color: green;
+}
+
+.negative {
+    color: red;
+}
+
+.neutral {
+    color: gray;
+}
+
+#info {
+    margin-top:100px;
+}
+
+/* Styles for the input and button */
+.input-container {
+    margin-top: 100px;
+}
+
+input[type="text"] {
+    padding: 10px;
+    width: 60%;
+    font-size: 16px;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Hide elements */
+.hidden {
+    display: none;
+}
