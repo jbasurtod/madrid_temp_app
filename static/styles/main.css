@@ -10,7 +10,9 @@
 html, body {
   height: 100%; /* Ensure the body takes the full height */
 }
-
+.logo-title{
+  width:550px;
+}
 body {
   font-family: 'Roboto', sans-serif;
   background-image: url('bg.jpg');
@@ -209,7 +211,9 @@ td[data-temp] {
   .location .titulo {
     font-size: 60px; /* Adjust font size for larger phones */
   }
-
+  .logo-title{
+    width:250px;
+  }
   .location .date {
     font-size: 30px; /* Adjust size for larger phones */
   }
@@ -241,7 +245,9 @@ td[data-temp] {
   .location .titulo {
     font-size: 30px; /* Adjust font size for very small screens */
   }
-
+  .logo-title{
+    width:350px;
+  }
   .location .date {
     font-size: 20px; /* Adjust font size for very small screens */
   }
@@ -280,7 +286,9 @@ td[data-temp] {
   .location .titulo {
     font-size: 25px; /* Adjust font size for very small screens */
   }
-
+  .logo-title{
+    width:300px;
+  }
   .location .date {
     font-size: 15px; /* Adjust font size for very small screens */
   }
@@ -597,3 +605,4 @@ main {
 .forecast-min {
   font-weight: normal;
 }
+

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="icon" type="image/x-icon" href="static/styles/icon.png">
+    <link rel="icon" type="image/x-icon" href="static/styles/climadrid_icon.png">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
@@ -15,7 +15,8 @@
     <div class="app-wrap">
         <main>
             <section class="location">
-                <div class="titulo">Temperature in San Isidro, Madrid</div>
+                <div class="titulo"><img class="logo-title" src="{{ url_for('static', filename='img/climadrid.png') }}" /></div>
+                <div class="date">Forecast for Barrio San Isidro</div>
                 <div class="date">Last Updated: {{ formatted_datetime }}</div>
             </section>
             <div class="current">
