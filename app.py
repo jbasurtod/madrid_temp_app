@@ -18,7 +18,7 @@ SECRET_PASSWORD = 'fqacdp0ov0w1bce6w274sdhczys9iq'  # Define a secret password f
 # Ensure the upload folder exists
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-@app.route('/madridtemp')
+@app.route('/climadrid')
 def index():
     worker = Worker()
     last_temperature, formatted_datetime, dates, date_hour_temp_map, max_temp, min_temp, pred5d_df, current_model = worker.GetData()
